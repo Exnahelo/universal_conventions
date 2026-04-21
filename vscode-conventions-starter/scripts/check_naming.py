@@ -1,0 +1,1 @@
+# Content of check_naming.py file
