@@ -1,26 +1,10 @@
+# Merge these sections into an existing pyproject.toml; do not replace project metadata.
 [tool.ruff]
 line-length = 100
-target-version = "py311"
-exclude = [
-  ".git",
-  ".venv",
-  "venv",
-  "node_modules",
-  "build",
-  "dist",
-  "__pycache__"
-]
+extend-exclude = ["**/originals/**"]
 
 [tool.ruff.lint]
-select = [
-  "E",
-  "F",
-  "I",
-  "B",
-  "UP",
-  "N"
-]
-ignore = []
+select = ["E4", "E7", "E9", "F", "I", "B", "UP", "N"]
 
 [tool.ruff.format]
 quote-style = "double"
