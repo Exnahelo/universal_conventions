@@ -1,43 +1,37 @@
-# VS Code Conventions Starter Kit
+# VS Code conventions starter kit
 
-This folder is a ready-to-drop baseline for enforcing the naming rules from `CONVENTIONS.md`.
+This is a set of files to select and merge, not a bulk overwrite installer.
+The shared policy is [conventions.md](../conventions.md), version 2.0.
 
-## What is included
+## Included files
 
-- `.vscode/settings.json` — workspace editor defaults
-- `.vscode/tasks.json` — a `check:naming` task that reports into Problems
-- `.vscode/extensions.json` — recommended extensions
-- `.editorconfig` — whitespace and newline normalization
-- `pyproject.toml` — Ruff config for Python
-- `eslint.config.mjs` — ESLint config for JavaScript
-- `.prettierrc.json` — Prettier config
-- `.markdownlint.jsonc` — Markdown lint config
-- `.sqlfluff` — SQLFluff starter config
-- `.pre-commit-config.yaml` — local commit gate
-- `.github/copilot-instructions.md` — AI instructions
-- `.github/prompts/naming-review.prompt.md` — reusable prompt
-- `.naming-rules.json` — project-local naming and mirror mapping config
-- `scripts/check_naming.py` — generic repository naming checker
+- `.vscode/settings.json`: explicit formatter owners and fallback settings.
+- `.vscode/extensions.json`: recommended extensions; not automatic installation.
+- `.vscode/tasks.json`: `check:naming` task with Problems-panel diagnostics.
+- `.editorconfig`: basic whitespace settings.
+- `.naming-rules.json` and `scripts/check_naming.py`: original exclusions and filename checks.
+- `pyproject.toml`: Ruff sections; merge with existing project metadata.
+- `.clang-format` and `.clang-tidy`: C++ baseline; select only for C++ projects.
+- `checkstyle.xml`: optional Java naming checks; wire into the chosen project build.
+- `.prettierrc.json` and `.prettierignore`: formatting and original exclusions.
+- `.markdownlint-cli2.jsonc`: Markdown structure checks and exclusions.
+- `eslint.config.mjs`: optional JavaScript-only ESLint baseline; requires `eslint`
+  and `@eslint/js`. JSX/TypeScript/frameworks need their own parser/configuration.
+- `conventions.local.md`: place to explain project overrides.
 
-## How to use
+No pre-commit hook, SQL dialect, build system, or AI-provider instruction file is
+silently installed. Existing configurations and dependencies must be merged,
+not replaced. Python's supported version belongs to each project, not this kit.
 
-1. Copy these files into the root of your repo.
-2. Edit `.naming-rules.json` to match your project structure.
-3. Install tool dependencies:
-   - Python: `pip install ruff pre-commit`
-   - JavaScript: `npm install --save-dev eslint @eslint/js prettier`
-   - Optional SQL: install `sqlfluff`
-4. Run `pre-commit install`
-5. In VS Code, run the task: **Tasks: Run Task** → `check:naming`
+## Adoption
 
-## Notes
+1. Review [adoption and coverage](../docs/adoption.md).
+2. Select and merge files applicable to the project; preserve existing rules.
+3. Identify original-only folders; keep derivatives outside them.
+4. Run `python3 scripts/check_naming.py --root .` to review filename diagnostics.
+5. Add that command to project CI after reviewing legacy names and exceptions.
+6. Reference the shared policy and writing style in the project's agent guidance.
 
-- The naming checker is intentionally generic. It enforces:
-  - no spaces in filenames
-  - Python module names are `snake_case`
-  - general Markdown docs are `kebab-case`
-  - shell scripts are `snake_case`
-  - JS files are `kebab-case`, or `PascalCase` for component-style files
-  - mirrored artifact stem consistency where configured
-
-- For project-specific schema rules, keep those in a separate policy file and extend the checker as needed.
+The script reports only: exit 0 means clean, 1 means violations, 2 means invalid
+configuration or an I/O failure. It never renames or edits files. Its optional
+`--root` removes dependence on where the terminal happens to be open.
